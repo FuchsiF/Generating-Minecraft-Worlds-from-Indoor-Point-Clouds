@@ -1,5 +1,5 @@
 # Generating-Minecraft-Worlds-from-Indoor-Point-Clouds
-Felix Fuchsloch, Noel Henke, Sofia F. Vyshnevska, 2026
+**Felix Fuchsloch, Noel Henke, Sofia F. Vyshnevska, 2026**
 
 This repository contains the adapted workflow and tools used to convert high-density **Indoor Mobile Laser Scan (MLS)** data into playable Minecraft worlds. The Workflow has been created for the project Generating Minecraft Worlds from Indoor Point Clouds in the course Applied Geoinformatics 2, by the Chair of Geoinformatics at the Technical University of Munich.   
 
@@ -69,7 +69,7 @@ python mesh_to_schematic_indoor\vox2schematic.py --i "model.vox" ^
 ```
 
 ### Step 5: Format Conversion
-Use either WorldEdit or Amulet to place the Schematic into the desired level. 
+Use either WorldEdit(in-game) or Amulet Editor(external) to place the ```.Schematic``` into the desired level. 
 
 ## Summary
 1. Preprocess in CloudCompare
