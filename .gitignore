@@ -1,0 +1,14 @@
+# Ignore large data files
+*.ply
+*.las
+*.laz
+*.vox
+*.schematic
+
+# Ignore OS generated files
+.DS_Store
+Thumbs.db
+
+# Ignore Python cache
+__pycache__/
+*.pyc
