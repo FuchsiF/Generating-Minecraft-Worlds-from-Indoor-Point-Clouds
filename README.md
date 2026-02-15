@@ -1,1 +1,44 @@
 # Generating-Minecraft-Worlds-from-Indoor-Point-Clouds
+Felix Fuchsloch, Noel Henke, Sofia F. Vyshnevska, 2026
+
+This repository contains the adapted workflow and tools used to convert high-density **Indoor Mobile Laser Scan (MLS)** data into playable Minecraft worlds. The Workflow has been created for the project Generating Minecraft Worlds from Indoor Point Clouds in the course Applied Geoinformatics 2, by the Chair of Geoinformatics at the Technical University of Munich.   
+
+Originally based on the [City of Helsinki's mesh_to_schematic](https://github.com/City-of-Helsinki/mesh_to_schematic) tool, this pipeline has been decoupled and modified to handle the specific challenges of indoor environments, including removal of furniture to ensure navigability in the World.
+
+## Prerequisites
+
+To reproduce this workflow, you will need the following software:
+
+1.  **[CloudCompare](https://www.danielgm.net/cc/)** (v2.12+): For preprocessing, subsampling, and RANSAC plane detection.
+2.  **[FileToVox](https://github.com/Zarbuz/FileToVox)** (Release v1.12+): For voxelizing the point cloud.
+3.  **[MagicaVoxel](https://ephtracy.github.io/)**: For intermediate file validation.
+4.  **Python 3.x**: To run the conversion script.
+5.  **Minecraft WorldEdit** or **Amulet Editor**: To import the final schematic into the desired World.
+---
+## Step-by-Step Workflow
+### Step 1: Preprocess the Point Cloud in Cloud Compare
+Open the raw dataset in CloudCompare and perform following steps:
+1. Subsampling: Use Edit > Subsample, choose the Spatial method in the dropdown.  
+2. Grid alignment: Use Edit > Translate/Rotate to rotate the point cloud along the Z-Axis until the building's primary walls are paralell to the X and Y axis.  
+3. Manual Cleanup: Remove any apparent scanning artefacts, such as reflections or floating points using the tool Edit > Segment.
+4. Use the same Segment tool to extract any staircases in the point cloud and merge them into one cloud using Edit > merge
+5. Apply the RANSAC Shape Detection plugin (Plugins > RANSAC Shape Detection) in two passes, once for the staircases and once for the remainder:
+   + Pass A: Walls & Floors (The Main Cloud)
+      + Select the main point cloud (excluding the extracted stairs).
+      + Primitives: Plane
+      + Min support points: 1250 
+      + Max distance to primitive: 0.05 
+   + Pass B: Staircases
+      + Select the isolated staircase cloud.
+      + Primitives: Plane
+      + Min support points: 100 
+      + Max distance to primitive: 0.05
+        
+### Step 2: Voxelization
+
+## Summary
+1. Preprocess in CloudCompare
+2. Run FileToVox
+3. Re-save in MagicaVoxel
+4. Run vox2schematic
+5. Import into Minecraft
