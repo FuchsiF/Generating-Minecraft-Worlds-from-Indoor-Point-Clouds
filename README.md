@@ -9,10 +9,9 @@ Originally based on the [City of Helsinki's mesh_to_schematic](https://github.co
 To reproduce this workflow, you will need the following software:
 
 1.  **[CloudCompare](https://www.danielgm.net/cc/)** (v2.12+): For preprocessing, subsampling, and RANSAC plane detection.
-2.  **[FileToVox](https://github.com/Zarbuz/FileToVox)** (Release v1.12+): For voxelizing the point cloud.
-3.  **[MagicaVoxel](https://ephtracy.github.io/)**: For intermediate file validation.
-4.  **Python 3.x**: To run the conversion script.
-5.  **Minecraft WorldEdit** or **Amulet Editor**: To import the final schematic into the desired World.
+2.  **[Minecraft Java Edition](https://www.minecraft.net/)**: Version 1.20.
+3.  **Python 3.x**: To run the conversion script.
+4.  **Minecraft WorldEdit** or **Amulet Editor**: To import the final schematic into the desired World.
 ---
 ## Setup
 We utilize conda to manage dependencies.
@@ -47,6 +46,30 @@ Open the raw dataset in CloudCompare and perform following steps:
       + Max distance to primitive: 0.05
         
 ### Step 2: Voxelization
+Run the ```FileToVox``` tool from the vendor folder: 
+   + ```--scale 1,9```: Maps 1 meter to ~1.9 blocks to increase the resolution of the reconstruction.
+   + ```color-limit 20```: Snaps colors to dominant hues to reduce noise.
+```
+.\mesh_to_schematic_indoor\vendor\FileToVox\FileToVox.exe --i "cleaned_cloud.ply" ^
+                                                           --o "model.vox" ^
+                                                           --scale 1,9 ^
+                                                           --color-limit 20
+```
+### Step 3: Open the .vox file in Magica Voxel
+1. Open ```model.vox``` using the included MagicaVoxel executable.
+2. Edit > Select > All
+3. Edit > Boolean > Union
+4. Save (Ctrl + S)
+
+### Step 4: Format Conversion
+Run the ```vox2schematic.py``` conversion script, wich uses our modified dictionary in its ```vox.py``` dependency:
+```
+python mesh_to_schematic_indoor\vox2schematic.py --i "model.vox" ^
+                                                 --o "level.schematic"
+```
+
+### Step 5: Format Conversion
+Use either WorldEdit or Amulet to place the Schematic into the desired level. 
 
 ## Summary
 1. Preprocess in CloudCompare
