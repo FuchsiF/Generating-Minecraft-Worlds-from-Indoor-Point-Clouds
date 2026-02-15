@@ -6,7 +6,6 @@ This repository contains the adapted workflow and tools used to convert high-den
 Originally based on the [City of Helsinki's mesh_to_schematic](https://github.com/City-of-Helsinki/mesh_to_schematic) tool, this pipeline has been decoupled and modified to handle the specific challenges of indoor environments, including removal of furniture to ensure navigability in the World.
 
 ## Prerequisites
-
 To reproduce this workflow, you will need the following software:
 
 1.  **[CloudCompare](https://www.danielgm.net/cc/)** (v2.12+): For preprocessing, subsampling, and RANSAC plane detection.
@@ -15,6 +14,19 @@ To reproduce this workflow, you will need the following software:
 4.  **Python 3.x**: To run the conversion script.
 5.  **Minecraft WorldEdit** or **Amulet Editor**: To import the final schematic into the desired World.
 ---
+## Setup
+We utilize conda to manage dependencies.
+### Step 1: Clone the repository:
+```
+git clone [https://github.com/FuchsiF/Generating-Minecraft-Worlds-from-Indoor-Point-Clouds.git](https://github.com/FuchsiF/Generating-Minecraft-Worlds-from-Indoor-Point-Clouds.git)
+cd Generating-Minecraft-Worlds-from-Indoor-Point-Clouds
+```
+### Step 2: Create the environment:
+```
+conda env create -f environment.yml
+conda activate minecraft-pipeline
+```
+
 ## Step-by-Step Workflow
 ### Step 1: Preprocess the Point Cloud in Cloud Compare
 Open the raw dataset in CloudCompare and perform following steps:
@@ -22,7 +34,7 @@ Open the raw dataset in CloudCompare and perform following steps:
 2. Grid alignment: Use Edit > Translate/Rotate to rotate the point cloud along the Z-Axis until the building's primary walls are paralell to the X and Y axis.  
 3. Manual Cleanup: Remove any apparent scanning artefacts, such as reflections or floating points using the tool Edit > Segment.
 4. Use the same Segment tool to extract any staircases in the point cloud and merge them into one cloud using Edit > merge
-5. Apply the RANSAC Shape Detection plugin (Plugins > RANSAC Shape Detection) in two passes, once for the staircases and once for the remainder:
+5. Apply the RANSAC Shape Detection plugin (Plugins > RANSAC Shape Detection) in two passes, once for the staircases and once for the remainder. In both cases the option to set random colors per primitive needs to diabled:
    + Pass A: Walls & Floors (The Main Cloud)
       + Select the main point cloud (excluding the extracted stairs).
       + Primitives: Plane
